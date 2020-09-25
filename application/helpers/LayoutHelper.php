@@ -466,7 +466,7 @@ class LayoutHelper
                 'showSaveButton' => false
             ],
             $aData['topBar']
-        );
+        ); //$aData['topBar']['showSaveButton']['url']
 
         Yii::app()->getClientScript()->registerPackage('admintoppanel');
         Yii::app()->getController()->renderPartial("/admin/survey/topbar/topbar_view", $aData);
