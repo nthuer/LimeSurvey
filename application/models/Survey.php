@@ -336,6 +336,12 @@ class Survey extends LSActiveRecord
             // Delete all uploaded files.
             rmdirr(Yii::app()->getConfig('uploaddir').'/surveys/'.$this->sid);
         }
+
+        // Remove from cache
+        if (array_key_exists($this->sid, $this->findByPkCache)) {
+            unset ($this->findByPkCache[$this->sid]);
+        }
+
         return true;
     }
 
@@ -516,7 +522,7 @@ class Survey extends LSActiveRecord
             array('googleanalyticsstyle', 'numerical', 'integerOnly'=>true, 'min'=>'0', 'max'=>'3', 'allowEmpty'=>true),
             array('autonumber_start', 'numerical', 'integerOnly'=>true, 'allowEmpty'=>true),
             array('tokenlength', 'default', 'value'=>15),
-            array('tokenlength', 'numerical', 'integerOnly'=>true, 'allowEmpty'=>false, 'min'=>'-1', 'max'=>'36'),
+            array('tokenlength', 'numerical', 'integerOnly'=>true, 'allowEmpty'=>false, 'min'=>'-1', 'max'=>'35'),
             array('bouncetime', 'numerical', 'integerOnly'=>true, 'allowEmpty'=>true),
             array('navigationdelay', 'numerical', 'integerOnly'=>true, 'allowEmpty'=>true),
             array('template', 'filter', 'filter'=>array($this, 'filterTemplateSave')),

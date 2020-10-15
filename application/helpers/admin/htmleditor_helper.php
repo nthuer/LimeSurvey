@@ -123,16 +123,26 @@
         }
     }
 
+    /**
+     * Returns Editor.
+     * 
+     * @param string   $fieldtype Field Type
+     * @param string   $fieldname Field Name
+     * @param int|null $surveyID  Survey ID
+     * @param int|null $gID       Group ID
+     * @param int|null $qID       Question ID
+     * @param string   $action    Action
+     * 
+     * @return string
+     */
     function getEditor($fieldtype, $fieldname, $fieldtext, $surveyID = null, $gID = null, $qID = null, $action = null)
     {
-
-
-        if (Yii::app()->getConfig('uniq_upload_dir') && !empty($surveyID)){
+        if (Yii::app()->getConfig('uniq_upload_dir') && !empty($surveyID)) {
             $surveyID = 'uniq';
         }
 
         initKcfinder();
-        //error_log("TIBO fieldtype=$fieldtype,fieldname=$fieldname,fieldtext=$fieldtext,surveyID=$surveyID,gID=$gID,qID=$qID,action=$action");
+
         $session = &Yii::app()->session;
 
         if ($session['htmleditormode'] && $session['htmleditormode'] == 'none') {
@@ -244,6 +254,8 @@
             ,filebrowserFlashUploadUrl:'{$sFakeBrowserURL}'";
         }
 
+        $loaderHTML = getLoaderHTML($fieldname);
+
         $scriptCode = ""
         . "
             if($('#".$fieldname."').length >0){
@@ -252,6 +264,8 @@
                         CKEDITOR.remove($oCKeditorVarName);
                     $oCKeditorVarName = null;
                 }
+
+                $('#".$fieldname."').before('$loaderHTML');
 
                 $oCKeditorVarName = CKEDITOR.replace('$fieldname', {
                 LimeReplacementFieldsType : \"".$fieldtype."\"
@@ -270,4 +284,23 @@
             }";
 
         Yii::app()->getClientScript()->registerScript('ckEditorScriptsInline-'.$fieldname, $scriptCode, LSYii_ClientScript::POS_POSTSCRIPT);
+    }
+
+    function getLoaderHTML($fieldname) 
+    {
+        $loaderHTML  = '  <div  id="' . $fieldname . '_htmleditor_loader" class="ls-flex ls-flex-column align-items-center align-content-center" style="height: 200px;">';
+        $loaderHTML .= '    <div class="loader--loaderWidget ls-flex ls-flex-column align-content-center align-items-center" style="min-height: 100%;">';
+        $loaderHTML .= '      <div class="ls-flex align-content-center align-items-center">';
+        $loaderHTML .= '        <div class="loader-adminpanel text-center" :class="extraClass">';
+        $loaderHTML .= '          <div class="contain-pulse animate-pulse">';
+        $loaderHTML .= '              <div class="square"></div>';
+        $loaderHTML .= '              <div class="square"></div>';
+        $loaderHTML .= '              <div class="square"></div>';
+        $loaderHTML .= '              <div class="square"></div>';
+        $loaderHTML .= '          </div>';
+        $loaderHTML .= '        </div>';
+        $loaderHTML .= '      </div>';
+        $loaderHTML .= '    </div>';
+        $loaderHTML .= '  </div>';
+        return $loaderHTML;
     }

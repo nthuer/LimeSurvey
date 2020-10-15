@@ -34,6 +34,61 @@ Thank you to everyone who helped with this new release!
 
 CHANGE LOG
 ------------------------------------------------------
+Changes from 4.3.19 (build 201005) to 4.3.20 (build 201012) October 12, 2020
++New feature: E-Mail bodies allow now for more than 64kb size when using MySQL (Carsten Schmitz)
+-Fixed issue: Some database updates from 3.x were not run on update (Carsten Schmitz)
+-Fixed issue: Error when too many translations are added to a survey (Carsten Schmitz)
+-Fixed issue: Database exception when trying to add the same user twice in survey permissions (Carsten Schmitz)
+-Fixed issue: Database exception is shown when trying to reload responses for/resume an inactive survey (Carsten Schmitz)
+-Fixed issue: Database exception is shown when trying to download files on a inactive survey (Carsten Schmitz)
+-Fixed issue: Database error on sorting CPDB participants by owner (Carsten Schmitz)
+-Fixed issue: Database error on question creation/editing if question text is too long (Carsten Schmitz)
+-Fixed issue #16708: php error in statistics view (Gabriel Jenik)
+-Fixed issue #16704: Inheritance not working when importing themes created for LS3.x (Gabriel Jenik)
+-Fixed issue #16694: Export multiple surveys (lss, lsa) to ZIP crashes or does not export reports/tokens for correct survey (GabrielJenik)
+-Fixed issue #16685: Delete Plugin files is not working  (Gabriel Jenik)
+-Fixed issue #16642: PHP warning when showing array questions  (Gabriel Jenik)
+-Fixed issue #16637: Statistics: Criteria not cleared for text question results (GabrielJenik)
+-Fixed issue #16620: simple statistics looks odd (GabrielJenik)
+#Updated translation: Japanese by nomoto, kmrmtr
+#Updated translation: Italian by lfanfoni
+#Updated translation: Italian (Informal) by lfanfoni
+#Updated translation: Finnish by Jmantysalo
+#Updated translation: Arabic by medhat
+
+
+Changes from 4.3.18 (build 200928) to 4.3.19 (build 201005) October 5, 2020
+-New feature: JSON available as export option for responses (Carsten Schmitz)
+-Fixed issue: RemoteControl API JSON export broken if first field it not response ID (Carsten Schmitz)
+-Fixed issue: Quick translation shows database error when group name too long (Carsten Schmitz)
+-Fixed issue: Importing participant with invalid Valid/ValidUntil date threw database error (Carsten Schmitz)
+-Fixed issue #16672: Can't select seperator for CPDB export - export doesn't recognise text (#1600) (Gabriel Jenik)
+-Fixed issue #16665: Question index not shown if survey mode is set to "inherit"(Gabriel Jenik)
+-Fixed issue #16658: queXMLPDF export shows JS script (Gabriel Jenik)
+-Fixed issue #16635: Timer not working when survey is active (when executing the survey multiple times in the same browser/tab) (Gabriel Jenik)
+-Fixed issue #16665: Question index not shown if survey mode is set to "inherit" (Gabriel Jenik)
+#Updated translation: Polish by elissa
+#Updated translation: Polish (Informal) by elissa
+#Updated translation: Japanese by nomoto
+#Updated translation: Italian by lfanfoni, ritapas
+#Updated translation: Italian (Informal) by lfanfoni, ritapas
+#Updated translation: German by c_schmitz
+#Updated translation: German (Informal) by c_schmitz
+#Updated translation: French (France) by DenisChenu
+#Updated translation: Finnish by Jmantysalo
+#Updated translation: Dutch by Han
+#Updated translation: Dutch (Informal) by Han
+#Updated translation: Croatian by rovinj
+#Updated translation: Catalan by qualitatuvic
+
+
+Changes from 4.3.17 (build 200921) to 4.3.18 (build 200928) September 28, 2020
+-Fixed issue: SPSS export broken for numbers > 1000 (Carsten Schmitz)
+-Fixed issue: If the participant table is too big the token generation may fail due to memory shortage (Carsten Schmitz)
+-Fixed issue: Accidental double deactivation throws database error (Carsten Schmitz)
+-Fixed issue #16693: Export responses to SPSS button does not work (Carsten Schmitz)
+
+
 Changes from 4.3.16 (build 200915) to 4.3.17 (build 200921) September 21, 2020
 -Fixed issue: SPSS export - Seed value does not have proper variable name (Carsten Schmitz)
 -Fixed issue: SPSS export - Empty value replacement causing corrupted data fields (Carsten Schmitz)
