@@ -1702,6 +1702,28 @@ class ExpressionManager
     }
 
     /**
+     * Reset current errors
+     * @see Related issue #16738: https://bugs.limesurvey.org/view.php?id=16738
+     * @link https://bugs.limesurvey.org/view.php?id=16738
+     * ProcessBooleanExpression didn't reset RDP_errors anb RDP_warnings, need a way to reset for Survey logic checking
+     * @return void
+     */
+    public function ResetErrors()
+    {
+        $this->RDP_errs = array();
+    }
+
+    /**
+     * Reset current errors and current warnings
+     * @return void
+     */
+    public function ResetErrorsAndWarnings()
+    {
+        $this->ResetErrors();
+        $this->ResetWarnings();
+    }
+
+    /**
      * Return true if there are syntax errors
      * @return boolean
      */

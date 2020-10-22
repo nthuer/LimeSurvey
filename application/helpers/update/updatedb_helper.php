@@ -3076,21 +3076,38 @@ function db_upgrade_all($iOldDBVersion, $bSilent = false)
 
         if ($iOldDBVersion < 424) {
             $oTransaction = $oDB->beginTransaction();
-            $installedPlugins = $oDB->createCommand('SELECT name FROM {{plugins}}')->queryAll();
+            $installedPlugins = array_map(
+                function ($v) {
+                    return $v['name'];
+                },
+                $oDB->createCommand('SELECT name FROM {{plugins}}')->queryAll()
+            );
             /**
              * @param string $name Name of plugin
              * @param int $active
              */
             $insertPlugin = function ($name, $active = 0) use ($installedPlugins, $oDB) {
                 if (!in_array($name, $installedPlugins)) {
-                    $oDB->createCommand()->insert("{{plugins}}", [
-                        'name'               => $name,
-                        'plugin_type'        => 'core',
-                        'active'             => $active,
-                        'version'            => '1.0.0',
-                        'load_error'         => 0,
-                        'load_error_message' => null
-                    ]);
+                    $oDB->createCommand()->insert(
+                        "{{plugins}}",
+                        [
+                            'name'               => $name,
+                            'plugin_type'        => 'core',
+                            'active'             => $active,
+                            'version'            => '1.0.0',
+                            'load_error'         => 0,
+                            'load_error_message' => null
+                        ]
+                    );
+                } else {
+                    $oDB->createCommand()->update(
+                        "{{plugins}}",
+                        [
+                            'plugin_type'        => 'core',
+                            'version'            => '1.0.0',
+                        ],
+                        "`name`='{$name}'"
+                    );
                 }
             };
             $insertPlugin('AuthLDAP');
@@ -4520,6 +4537,10 @@ function upgradeSurveyTables181($sMySQLCollation)
                     $oDB->createCommand()->createIndex("{{idx_{$sTableName}_".rand(1, 40000).'}}', $sTableName, 'token');
                     break;
                 case 'mysql':
+                case 'mysqli':
+                    // Fixes 0000-00-00 00:00:00 datetime entries
+                    $oDB->createCommand()->update($sTableName,array('startdate'=>'1980-01-01 00:00:00'),"startdate=0");
+                    $oDB->createCommand()->update($sTableName,array('datestamp'=>'1980-01-01 00:00:00'),"datestamp=0");
                     alterColumn($sTableName, 'token', "string(35) COLLATE '{$sMySQLCollation}'");
                     break;
                 default: die('Unknown database driver');
