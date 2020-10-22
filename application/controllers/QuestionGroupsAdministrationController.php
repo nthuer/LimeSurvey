@@ -328,7 +328,10 @@ class QuestionGroupsAdministrationController extends LSBaseController
     {
         $iSurveyID = sanitize_int($surveyid);
 
-        //todo permission check ...who has permission to see questionGroups?
+        if (!Permission::model()->hasSurveyPermission($iSurveyID, 'surveycontent', 'read')) {
+            App()->user->setFlash('error', gT("Access denied"));
+            $this->redirect(App()->request->urlReferrer);
+        }
 
         $survey = Survey::model()->findByPk($iSurveyID);
 
@@ -582,6 +585,15 @@ class QuestionGroupsAdministrationController extends LSBaseController
      */
     public function actionLoadQuestionGroup($surveyid, $iQuestionGroupId = null)
     {
+        $surveyid = sanitize_int($surveyid);
+        //permission check
+        if (!Permission::model()->hasSurveyPermission($surveyid, 'surveycontent', 'update')) {
+            $this->renderJSON([
+                'success' => false,
+                'message' => 'No permission'
+            ]);
+        }
+
         $oQuestionGroup = QuestionGroup::model()->findByPk($iQuestionGroupId);
         $oSurvey = Survey::model()->findByPk($surveyid);
 
@@ -669,9 +681,8 @@ class QuestionGroupsAdministrationController extends LSBaseController
     {
         $iQuestionGroupId = (int) $iQuestionGroupId;
         $oQuestionGroup = QuestionGroup::model()->findByPk($iQuestionGroupId);
-        if ($oQuestionGroup == null) {
+        if ($oQuestionGroup == null || (!Permission::model()->hasSurveyPermission($surveyid, 'surveycontent', 'read'))) {
             $this->renderJSON([]);
-            return;
         }
         $aQuestions = [];
         $aAllQuestions = $oQuestionGroup->questions;
@@ -798,6 +809,23 @@ class QuestionGroupsAdministrationController extends LSBaseController
         $oSurvey = Survey::model()->findByPk($surveyid);
         $success = true;
         $grouparray  = [];
+
+        //permission check
+        if (!Permission::model()->hasSurveyPermission($surveyid, 'surveycontent', 'update')) {
+            return $this->renderPartial(
+                '/admin/super/_renderJson',
+                array(
+                    'data' => [
+                        'success' => false,
+                        'message' => gT("You can't reorder in an active survey"),
+                        'DEBUG' => ['POST'=>$_POST, 'grouparray' => $grouparray]
+                    ],
+                ),
+                false,
+                false
+            );
+        }
+
         if (!$oSurvey->isActive) {
             $grouparray = App()->request->getPost('grouparray', []);
             if (!empty($grouparray)) {
@@ -886,6 +914,8 @@ class QuestionGroupsAdministrationController extends LSBaseController
      */
     public function actionGetQuestionGroupTopBar($sid, $gid = null)
     {
+        //permission ??
+
         $oSurvey = Survey::model()->findByPk($sid);
         $oQuestionGroup = null;
         if ($gid) {
