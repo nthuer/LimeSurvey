@@ -2839,7 +2839,6 @@ class SurveyAdministrationController extends LSBaseController
         );
 
         App()->getClientScript()->registerPackage('ace');
-        App()->getClientScript()->registerPackage('textelements');
         $aData = $aTabTitles = $aTabContents = array();
         return $aData;
     }
