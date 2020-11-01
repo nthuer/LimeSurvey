@@ -30,9 +30,9 @@
 		}
 	},
 	"require": {
-		"platform": {
-			"php": "7.5.0"
-		}
+		"php": "7.4.*",
+		"ext-mbstring": "*",
+		"ext-memcached": "*"
 	},
     "config": {
         "vendor-dir": "third_party",
