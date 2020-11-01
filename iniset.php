@@ -11,3 +11,11 @@ if(version_compare(phpversion('memcached'), '3', '>=')) {
 }
 ini_set('memcached.sess_sasl_username', getenv('MEMCACHIER_USERNAME'));
 ini_set('memcached.sess_sasl_password', getenv('MEMCACHIER_PASSWORD'));
+
+session_start();
+if (!isset($_SESSION['count'])) {
+    $_SESSION['count'] = 0;
+}
+$_SESSION['count']++;
+
+echo "Hello #" . $_SESSION['count'];
